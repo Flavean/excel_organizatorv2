@@ -91,28 +91,28 @@ class MainWindow(QMainWindow):
                     QTableWidgetItem(str(value))
                 )
 
-        def open_sort_dialog(self):
-            dialog = SortDialog(
-                self.data.columns.astype(str).tolist(),
-                self
-            )
+    def open_sort_dialog(self):
+        dialog = SortDialog(
+            self.data.columns.astype(str).tolist(),
+            self
+        )
 
-            if dialog.exec():
-                selected_column = dialog.selected_column
-                ascending = dialog.ascending
+        if dialog.exec():
+            selected_column = dialog.selected_column
+            ascending = dialog.ascending
 
-                from core.sorter import sort_data
+            from core.sorter import sort_data
 
-                sorted_data = sort_data(
-                    self.data.copy(),
-                    selected_column,
-                    ascending
-                ) 
+            sorted_data = sort_data(
+                self.data.copy(),
+                selected_column,
+                ascending
+            ) 
 
-                preview_dialog = PreviewDialog(sorted_data, self)
+            preview_dialog = PreviewDialog(sorted_data, self)
 
-                if preview_dialog.exec():
-                    self.data = sorted_data
-                    self.update_table()
+            if preview_dialog.exec():
+                self.data = sorted_data
+                self.update_table()
 
 
