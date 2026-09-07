@@ -10,6 +10,7 @@ from core.excel_handler import load_excel
 from core.cleaner import clean_data
 from ui.clear_dialog import CleanDialog
 from ui.preview_dialog import PreviewDialog
+from ui.sort_dialog import SortDialog
 
 
 class MainWindow(QMainWindow):
@@ -23,8 +24,11 @@ class MainWindow(QMainWindow):
         self.open_button = QPushButton("Open Excel", self)
         self.open_button.setGeometry(350, 450, 200, 50)
         self.clear_button = QPushButton("Clean", self)
-        self.clear_button.setGeometry(350, 510, 200,50)
+        self.clear_button.setGeometry(350, 510, 200, 50)
+        self.sort_button = QPushButton("Sort", self)
+        self.sort_button.setGeometry(350, 570, 200, 50)
         self.clear_button.clicked.connect(self.open_clean_dialog)
+        self.sort_button.clicked.connect(self.open_clean_dialog)
         self.table = QTableWidget(self)
         self.table.setGeometry(50, 50, 800,350)
 
@@ -86,3 +90,29 @@ class MainWindow(QMainWindow):
                     column,
                     QTableWidgetItem(str(value))
                 )
+
+        def open_sort_dialog(self):
+            dialog = SortDialog(
+                self.data.columns.astype(str).tolist(),
+                self
+            )
+
+            if dialog.exec():
+                selected_column = dialog.selected_column
+                ascending = dialog.ascending
+
+                from core.sorter import sort_data
+
+                sorted_data = sort_data(
+                    self.data.copy(),
+                    selected_column,
+                    ascending
+                ) 
+
+                preview_dialog = PreviewDialog(sorted_data, self)
+
+                if preview_dialog.exec():
+                    self.data = sorted_data
+                    self.update_table()
+
+
