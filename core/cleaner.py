@@ -22,13 +22,12 @@ def clean_spaces(data):
 
     return data
 
-    return data
 def clean_data(data, options):
     if options["remove_empty_rows"]:
         data = remove_empty_rows(data)
 
     if options["remove_empty_columns"]:
-        dara = remove_empty_columns(data)
+        data = remove_empty_columns(data)
 
     if options["remove_sparse_columns"]:
         data = remove_sparse_columns(data, options["threshold"])
@@ -40,3 +39,6 @@ def clean_data(data, options):
         data = clean_spaces(data)
 
     return data
+
+def delete_columns(data, columns):
+        return data.drop(columns=columns)
